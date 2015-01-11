@@ -6,12 +6,24 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
+            	<xpath expr="/form/header/button[@name='action_button_confirm']" position="after" >
+            		<button name="action_button_convert_to_order" attrs="{'invisible': ['|', ('order_type','=','sale_order'), ('state','!=','draft')]}"
+            				type="object" string="Convert to Order" groups="base.group_user"/>
+            		<button name="action_button_convert_to_order" attrs="{'invisible': ['|', ('order_type','=','sale_order'), ('state','!=','sent')]}"
+            				class="oe_highlight" type="object" string="Convert to Order" groups="base.group_user"/>
+                </xpath>
                 <field name="project_id" position="after">
                     <field name="order_type" />
+                    <field name="quote_id" attrs="{'invisible': [('order_type','=','quotation')]}"/>
                 </field>
+                <label string="Quotation " position="replace">
+                	<label string="Quotation " attrs="{'invisible': [('order_type','=','sale_order')]}"/>
+                </label>
+                <label string="Sales Order " position="replace">
+                	<label string="Sales Order " attrs="{'invisible': [('order_type','=','quotation')]}"/>
+                </label>
             </field>
         </record>
-        
         
         <record id="sale.action_quotations" model="ir.actions.act_window">
             <field name="context">{
@@ -19,6 +31,7 @@
                     'order_type': 'quotation',
                 }
             </field>
+            <field name="domain">[('order_type', '=', 'quotation')]</field>
         </record>
         <record id="sale.action_orders" model="ir.actions.act_window">
             <field name="context">{
@@ -26,7 +39,8 @@
                     'order_type': 'sale_order',
                 }
             </field>
+            <field name="domain">[('order_type', '=', 'sale_order')]</field>
         </record>
-        
+
     </data>
 </openerp>

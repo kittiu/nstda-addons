@@ -36,10 +36,13 @@ class sale_order(models.Model):
             ('sale_order','Sales Order'),
         ], string='Order Type', readonly=True, index=True, 
         default=lambda self: self._context.get('order_type', 'sale_order'),)    
+    quote_id = fields.Many2one('sale.order', string='Quotation Reference', readonly=True, index=True, ondelete='restrict')
     
-    @api.multi
-    def action_button_confirm(self):
+    @api.one
+    def action_button_convert_to_order(self):
         assert len(self) == 1, 'This option should only be used for a single id at a time.'
+        order = self.copy({'order_type': 'sale_order',
+                           'quote_id': self.id})
         self.signal_workflow('convert_to_order')
         return True
 
