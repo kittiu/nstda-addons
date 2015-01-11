@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_sale_create_billing_plan" model="ir.ui.view">
+            <field name="name">Create Billing Plan</field>
+            <field name="model">sale.create.billing.plan</field>
+            <field name="arch" type="xml">
+                <form string="Create Billing Plan">
+                    <group>
+	                    <group>    
+	                        <field name="num_installment" />
+		                  	<p class="oe_grey">
+		                          This wizard will help you prepare the billing plan.
+		                          Please select number of installment, and invoice date of each installment.
+		                    </p>
+	                    </group>
+	                    <group>
+	                    	<field name="installment_ids" nolabel="1" >
+		                    	<tree string="Installments" create="0" delete="0" editable="bottom">
+			                    	<field name="installment" />
+			                    	<field name="date_invoice" />
+		                    	</tree>
+		                    </field>
+	                    </group>
+                    </group>
+                    <footer>
+                        <button name="do_create_billing_plan" string="_Apply" type="object" class="oe_highlight"/>
+                        or
+                        <button string="_Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sale_create_billing_plan" model="ir.actions.act_window">
+            <field name="name">Create Billing Plan</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.create.billing.plan</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_sale_create_billing_plan"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>
+

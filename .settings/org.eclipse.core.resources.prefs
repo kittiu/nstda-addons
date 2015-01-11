@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//sale_billing_plan/__init__.py=utf-8
+encoding//sale_billing_plan/__openerp__.py=utf-8
+encoding//sale_billing_plan/sale.py=utf-8
+encoding//sale_billing_plan/wizard/sale_create_billing_plan.py=utf-8
+encoding//sale_quote_separate/__init__.py=utf-8
+encoding//sale_quote_separate/__openerp__.py=utf-8
+encoding//sale_quote_separate/sale.py=utf-8

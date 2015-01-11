@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="trans_draft_to_done" model="workflow.transition">
+            <field name="act_from" ref="sale.act_draft"/>
+            <field name="act_to" ref="sale.act_done"/>
+            <field name="signal">convert_to_order</field>
+        </record>
+        <record id="trans_sent_to_done" model="workflow.transition">
+            <field name="act_from" ref="sale.act_sent"/>
+            <field name="act_to" ref="sale.act_done"/>
+            <field name="signal">convert_to_order</field>
+        </record>
+
+    </data>
+</openerp>
