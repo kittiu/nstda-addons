@@ -35,7 +35,7 @@ class sale_order(models.Model):
     use_billing_plan = fields.Boolean(string='Use Billing Plan', readonly=True, states={'draft': [('readonly', False)]}, 
         default=False, help="It indicates that the invoice has been sent.")
     billing_plan_ids = fields.One2many('sale.billing.plan', 'order_id', string='Billing Plan',
-        readonly=True, states={'draft': [('readonly', False)]})
+        readonly=True, states={'draft': [('readonly', False)]}, copy=True)
                 
     @api.onchange('use_billing_plan')
     def _onchange_use_billing_plan(self):
@@ -45,7 +45,7 @@ class sale_order(models.Model):
             default_order_policy = self.env['ir.values'].get_default('sale.order', 'order_policy')
             self.order_policy = default_order_policy or 'manual'
             
-    @api.model
+    @api.one
     def _check_billing_plan(self):
         if self.use_billing_plan:
             for order_line in self.order_line:
@@ -56,6 +56,12 @@ class sale_order(models.Model):
                     raise except_orm(_('Plan Amount Mismatch!'),
                             _("'%s', plan amount %d not equal to line amount %d!") 
                             % (order_line.product_id.name, total_amount, order_line.price_subtotal))
+        return True
+    
+    @api.one
+    def action_button_confirm(self):
+        self._check_billing_plan()
+        super(sale_order, self).action_button_confirm()
         return True
     
     @api.multi
@@ -176,12 +182,12 @@ class sale_order_line(models.Model):
         for this in self.browse(cr, uid, ids, context=context):
             # kittiu, if product line, we need to calculate carefully
             if this.product_id and not this.product_uos: # TODO: uos case is not covered yet.
-                oline_qty = uom_obj._compute_qty(cr, uid, this.product_uom.id, this.product_uom_qty, this.product_id.uom_id.id)
+                oline_qty = uom_obj._compute_qty(cr, uid, this.product_uom.id, this.product_uom_qty, this.product_id.uom_id.id, round=False)
                 iline_qty = 0.0
                 for iline in this.invoice_lines:
                     if iline.invoice_id.state != 'cancel':
                         if not this.product_uos: # Normal Case
-                            iline_qty += uom_obj._compute_qty(cr, uid, iline.uos_id.id, iline.quantity, iline.product_id.uom_id.id)
+                            iline_qty += uom_obj._compute_qty(cr, uid, iline.uos_id.id, iline.quantity, iline.product_id.uom_id.id, round=False)
                         else: # UOS case.
                             iline_qty += iline.quantity / (iline.product_id.uos_id and iline.product_id.uos_coeff or 1)                        
                 # Test quantity
@@ -199,6 +205,11 @@ class sale_order_line(models.Model):
                                     WHERE rel.invoice_id = ANY(%s)""", (list(ids),))
         return [i[0] for i in cr.fetchall()]
 
+    # New style
+    billing_plan_ids = fields.One2many('sale.billing.plan', 'order_line_id', string='Billing Plan',
+        readonly=True)
+
+    # Old style
     from openerp.osv import fields, osv
     _columns = {
         'invoiced': fields.function(_fnct_line_invoiced, string='Invoiced', type='boolean',
@@ -212,11 +223,11 @@ class sale_billing_plan(models.Model):
     _description = "Billing Plan"
     _order = "order_id,sequence,id"
     
-    order_id = fields.Many2one('sale.order', string='Order Reference', readonly=True, index=True, ondelete='cascade', copy=False)
-    order_line_id = fields.Many2one('sale.order.line', string='Order Line Reference', readonly=True, index=True, ondelete='cascade', copy=False)
+    order_id = fields.Many2one('sale.order', string='Order Reference', readonly=True, index=True, ondelete='cascade')
+    order_line_id = fields.Many2one('sale.order.line', string='Order Line Reference', readonly=True, index=True, ondelete='cascade')
     sequence = fields.Integer(string='Sequence', default=10, help="Gives the sequence of this line when displaying the billing plan.")
     installment = fields.Integer(string='Installment', help="Group of installment. Each group will be an invoice")
-    date_invoice = fields.Date(string='Invoice Date', index=True, copy=False)
+    date_invoice = fields.Date(string='Invoice Date', index=True)
     product_id = fields.Many2one('product.product', string='Product', related='order_line_id.product_id', store=True, readonly=True,)
     name = fields.Text(string='Description', related='order_line_id.name', store=True, readonly=True,)    
     bill_percent = fields.Float(string='Percent', digits=(12,6))

@@ -32,7 +32,6 @@
     'depends' : ['sale', 'sale_stock'],
     'data': [
         "wizard/sale_create_billing_plan_view.xml",
-        "sale_workflow.xml",
         "sale_view.xml",
     ],
     'qweb' : [
