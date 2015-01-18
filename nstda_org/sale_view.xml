@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_order_form_ext" model="ir.ui.view">
+            <field name="name">view.order.form.ext</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr='/form/sheet/group//field[@name="date_order"]' position="before">
+                	<field name="business_area_id"/>
+                	<field name="sale_office_id"/>
+                </xpath>
+                <xpath expr='/form/sheet/notebook/page/field/tree/field[@name="product_uom_qty"]' position="before">
+                	<field name="profit_center_id"/>
+                	<field name="wbs_project_id"/>
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

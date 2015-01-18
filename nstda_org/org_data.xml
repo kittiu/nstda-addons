@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Resource: business.area -->
+        <record id="all_business_area_account" model="account.analytic.account">
+            <field name="name">Business Area</field>
+            <field name="code">BUSINESSAREA</field>
+            <field name="type">view</field>
+        </record>
+        <function id="parent_business_area_default_set" model="ir.values" name="set" eval="('default',False,'parent_id', [('business.area', False)], all_business_area_account, True, False, False, False, True)"/>
+
+        <!-- Resource: sale.office -->
+        <record id="all_sale_office_account" model="account.analytic.account">
+            <field name="name">Sales Office</field>
+            <field name="code">SALEOFFICE</field>
+            <field name="type">view</field>
+        </record>
+        <function id="parent_sale_office_default_set" model="ir.values" name="set" eval="('default',False,'parent_id', [('sale.office', False)], all_sale_office_account, True, False, False, False, True)"/>
+
+        <!-- Resource: profit.center -->
+        <record id="all_profit_center_account" model="account.analytic.account">
+            <field name="name">Profit Center</field>
+            <field name="code">PROFITCENTER</field>
+            <field name="type">view</field>
+        </record>
+        <function id="parent_profit_center_default_set" model="ir.values" name="set" eval="('default',False,'parent_id', [('profit.center', False)], all_profit_center_account, True, False, False, False, True)"/>
+
+
+        <!-- Resource: wbs.project -->
+        <record id="all_wbs_project_account" model="account.analytic.account">
+            <field name="name">WBS/Project</field>
+            <field name="code">WBSPROJECT</field>
+            <field name="type">view</field>
+        </record>
+        <function id="parent_wbs_project_default_set" model="ir.values" name="set" eval="('default',False,'parent_id', [('wbs.project', False)], all_wbs_project_account, True, False, False, False, True)"/>
+
+    </data>
+</openerp>

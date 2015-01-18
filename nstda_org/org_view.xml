@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    	# -------------
+    	# Business Area
+    	# -------------
+    
+        <record model="ir.ui.view" id="view_business_area_tree">
+            <field name="name">view.business.area.tree</field>
+            <field name="model">business.area</field>
+            <field name="arch" type="xml">
+                <tree string="Business Area">
+                    <field name="code" />
+                    <field name="name"  />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_business_area_form">
+            <field name="name">view.business.area.form</field>
+            <field name="model">business.area</field>
+            <field name="arch" type="xml">
+                <form string="Business Area" version="7.0">
+                <sheet>
+                    <label for="code" class="oe_edit_only" string="Business Area - Code and Name"/>
+                    <h1>
+                        <field name="code" class="oe_inline" placeholder="Code" style="width: 6em"/> -
+                        <field name="name" class="oe_inline" placeholder="Name"/>
+                    </h1>
+                    <notebook>
+                    	<page string="Users">
+                    		<field name="user_ids" />
+                    	</page>
+                    	<page string="Sales Offices">
+                    		<field name="sale_office_ids" readonly="1" />
+                    	</page>
+                    	<page string="Profit Centers">
+                    		<field name="profit_center_ids" readonly="1" />
+                    	</page>
+                    	<page string="WBS/Projects">
+                    		<field name="wbs_project_ids" readonly="1" />
+                    	</page>
+                    	<page string="Other Info">
+	                    	<group string="Miscellenous">
+	                    		<group>
+	                    			<field name="parent_id" domain="[('id','!=',analytic_account_id)]" context="{'current_model': 'business.area'}" />
+	                    		</group>
+		                    	<group>
+		                    	</group>
+		                    </group>                    	
+                    	</page>
+                    </notebook>
+				</sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_business_area_form">
+            <field name="name">Business Area</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">business.area</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_business_area_tree"/>
+        </record>
+        
+        <!-- Menu -->
+        <menuitem id="menu_business_area" action="action_business_area_form" parent="base.menu_res_company_global" name="Business Area" sequence="10"
+            groups="base.group_no_one"/>
+            
+            
+    	# -------------
+    	# Sales Office
+    	# -------------
+    
+        <record model="ir.ui.view" id="view_sale_office_tree">
+            <field name="name">view.sale.office.tree</field>
+            <field name="model">sale.office</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Office">
+                    <field name="code" />
+                    <field name="name"  />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_sale_office_form">
+            <field name="name">view.sale.office.form</field>
+            <field name="model">sale.office</field>
+            <field name="arch" type="xml">
+                <form string="Sales Office" version="7.0">
+                <sheet>
+                    <label for="code" class="oe_edit_only" string="Sales Office - Code and Name"/>
+                    <h1>
+                        <field name="code" class="oe_inline" placeholder="Code" style="width: 6em"/> -
+                        <field name="name" class="oe_inline" placeholder="Name"/>
+                    </h1>
+                    <group>
+                    	<group>
+                    		<field name="business_area_id" />
+                    	</group>
+                    	<group>
+                    	</group>
+                    </group>
+                    <notebook>
+                    	<page string="Other Info">
+	                    	<group string="Miscellenous">
+	                    		<group>
+	                    			<field name="parent_id" domain="[('id','!=',analytic_account_id)]" context="{'current_model': 'sale.office'}" />
+	                    		</group>
+		                    	<group>
+		                    	</group>
+		                    </group>                    	
+                    	</page>
+                    </notebook>
+				</sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_sale_office_form">
+            <field name="name">Sales Office</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.office</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_sale_office_tree"/>
+        </record>
+        
+        <!-- Menu -->
+        <menuitem id="menu_sale_office" action="action_sale_office_form" parent="base.menu_res_company_global" name="Sales Office" sequence="20"
+            groups="base.group_no_one"/>
+            
+    	# -------------
+    	# Profit Center
+    	# -------------
+    
+        <record model="ir.ui.view" id="view_profit_center_tree">
+            <field name="name">view.profit.center.tree</field>
+            <field name="model">profit.center</field>
+            <field name="arch" type="xml">
+                <tree string="Profit Center">
+                    <field name="code" />
+                    <field name="name"  />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_profit_center_form">
+            <field name="name">view.profit.center.form</field>
+            <field name="model">profit.center</field>
+            <field name="arch" type="xml">
+                <form string="Profit Center" version="7.0">
+                <sheet>
+                    <label for="code" class="oe_edit_only" string="Profit Center - Code and Name"/>
+                    <h1>
+                        <field name="code" class="oe_inline" placeholder="Code" style="width: 6em"/> -
+                        <field name="name" class="oe_inline" placeholder="Name"/>
+                    </h1>
+                    <group>
+                    	<group>
+                    		<field name="business_area_id" />
+                    	</group>
+                    	<group>
+                    	</group>
+                    </group>
+                    <notebook>
+                    	<page string="Other Info">
+	                    	<group string="Miscellenous">
+	                    		<group>
+	                    			<field name="parent_id" domain="[('id','!=',analytic_account_id)]" context="{'current_model': 'profit.center'}" />
+	                    		</group>
+		                    	<group>
+		                    	</group>
+		                    </group>                    	
+                    	</page>
+                    </notebook>
+				</sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_profit_center_form">
+            <field name="name">Profit Center</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">profit.center</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_profit_center_tree"/>
+        </record>
+        
+        <!-- Menu -->
+        <menuitem id="menu_profit_center" action="action_profit_center_form" parent="base.menu_res_company_global" name="Profit Center" sequence="30"
+            groups="base.group_no_one"/>
+    	# -------------
+    	# WBS/Project
+    	# -------------
+    
+        <record model="ir.ui.view" id="view_wbs_project_tree">
+            <field name="name">view.wbs.project.tree</field>
+            <field name="model">wbs.project</field>
+            <field name="arch" type="xml">
+                <tree string="WBS/Project">
+                    <field name="code" />
+                    <field name="name"  />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_wbs_project_form">
+            <field name="name">view.wbs.project.form</field>
+            <field name="model">wbs.project</field>
+            <field name="arch" type="xml">
+                <form string="WBS/Project" version="7.0">
+                <sheet>
+                    <label for="code" class="oe_edit_only" string="WBS/Project - Code and Name"/>
+                    <h1>
+                        <field name="code" class="oe_inline" placeholder="Code" style="width: 6em"/> -
+                        <field name="name" class="oe_inline" placeholder="Name"/>
+                    </h1>
+                    <group>
+                    	<group>
+                    		<field name="business_area_id" />
+                    	</group>
+                    	<group>
+                    	</group>
+                    </group>
+                    <notebook>
+                    	<page string="Other Info">
+	                    	<group string="Miscellenous">
+	                    		<group>
+	                    			<field name="parent_id" domain="[('id','!=',analytic_account_id)]" context="{'current_model': 'wbs.project'}" />
+	                    		</group>
+		                    	<group>
+		                    	</group>
+		                    </group>                    	
+                    	</page>
+                    </notebook>
+				</sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_wbs_project_form">
+            <field name="name">WBS/Project</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wbs.project</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_wbs_project_tree"/>
+        </record>
+        
+        <!-- Menu -->
+        <menuitem id="menu_wbs_project" action="action_wbs_project_form" parent="base.menu_res_company_global" name="WBS/Project" sequence="40"
+            groups="base.group_no_one"/>
+    </data>
+</openerp>
