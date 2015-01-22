@@ -1,4 +1,12 @@
 eclipse.preferences.version=1
+encoding//nstda_org/__init__.py=utf-8
+encoding//nstda_org/__openerp__.py=utf-8
+encoding//nstda_org/account_invoice.py=utf-8
+encoding//nstda_org/account_move_line.py=utf-8
+encoding//nstda_org/analytic.py=utf-8
+encoding//nstda_org/org.py=utf-8
+encoding//nstda_org/res_users.py=utf-8
+encoding//nstda_org/sale.py=utf-8
 encoding//sale_billing_plan/__init__.py=utf-8
 encoding//sale_billing_plan/__openerp__.py=utf-8
 encoding//sale_billing_plan/sale.py=utf-8
