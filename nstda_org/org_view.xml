@@ -1,6 +1,63 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+      	# -------------
+    	# Branch
+    	# -------------
+    
+        <record model="ir.ui.view" id="view_branch_tree">
+            <field name="name">view.branch.tree</field>
+            <field name="model">branch</field>
+            <field name="arch" type="xml">
+                <tree string="Branch">
+                    <field name="code" />
+                    <field name="name"  />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_branch_form">
+            <field name="name">view.branch.form</field>
+            <field name="model">branch</field>
+            <field name="arch" type="xml">
+                <form string="Branch" version="7.0">
+                <sheet>
+                    <label for="code" class="oe_edit_only" string="Branch - Code and Name"/>
+                    <h1>
+                        <field name="code" class="oe_inline" placeholder="Code" style="width: 6em"/> -
+                        <field name="name" class="oe_inline" placeholder="Name"/>
+                    </h1>
+                    <notebook>
+                    	<page string="Sales Offices">
+                    		<field name="sale_office_ids" readonly="1" />
+                    	</page>
+                    	<page string="Other Info">
+	                    	<group string="Miscellenous">
+	                    		<group>
+	                    			<field name="parent_id" domain="[('id','!=',analytic_account_id)]" context="{'current_model': 'business.area'}" />
+	                    		</group>
+		                    	<group>
+		                    	</group>
+		                    </group>                    	
+                    	</page>
+                    </notebook>
+				</sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_branch_form">
+            <field name="name">Branch</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">branch</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_branch_tree"/>
+        </record>
+        
+        <!-- Menu -->
+        <menuitem id="menu_branch" action="action_branch_form" parent="base.menu_res_company_global" name="Branch" sequence="10"
+            groups="base.group_no_one"/>
+                  
     	# -------------
     	# Business Area
     	# -------------
@@ -36,9 +93,6 @@
                     	<page string="Profit Centers">
                     		<field name="profit_center_ids" readonly="1" />
                     	</page>
-                    	<page string="WBS/Projects">
-                    		<field name="wbs_project_ids" readonly="1" />
-                    	</page>
                     	<page string="Other Info">
 	                    	<group string="Miscellenous">
 	                    		<group>
@@ -64,9 +118,8 @@
         </record>
         
         <!-- Menu -->
-        <menuitem id="menu_business_area" action="action_business_area_form" parent="base.menu_res_company_global" name="Business Area" sequence="10"
+        <menuitem id="menu_business_area" action="action_business_area_form" parent="base.menu_res_company_global" name="Business Area" sequence="15"
             groups="base.group_no_one"/>
-            
             
     	# -------------
     	# Sales Office
@@ -98,6 +151,7 @@
                     		<field name="business_area_id" />
                     	</group>
                     	<group>
+                    		<field name="branch_id" />
                     	</group>
                     </group>
                     <notebook>
@@ -126,7 +180,7 @@
         </record>
         
         <!-- Menu -->
-        <menuitem id="menu_sale_office" action="action_sale_office_form" parent="base.menu_res_company_global" name="Sales Office" sequence="20"
+        <menuitem id="menu_sale_office" action="action_sale_office_form" parent="menu_business_area" name="Sales Office" sequence="20"
             groups="base.group_no_one"/>
             
     	# -------------
@@ -162,6 +216,9 @@
                     	</group>
                     </group>
                     <notebook>
+                    	<page string="WBS/Projects">
+                    		<field name="wbs_project_ids" readonly="1" />
+                    	</page>
                     	<page string="Other Info">
 	                    	<group string="Miscellenous">
 	                    		<group>
@@ -187,7 +244,7 @@
         </record>
         
         <!-- Menu -->
-        <menuitem id="menu_profit_center" action="action_profit_center_form" parent="base.menu_res_company_global" name="Profit Center" sequence="30"
+        <menuitem id="menu_profit_center" action="action_profit_center_form" parent="menu_business_area" name="Profit Center" sequence="30"
             groups="base.group_no_one"/>
     	# -------------
     	# WBS/Project
@@ -216,7 +273,7 @@
                     </h1>
                     <group>
                     	<group>
-                    		<field name="business_area_id" />
+                    		<field name="profit_center_id" />
                     	</group>
                     	<group>
                     	</group>
@@ -247,7 +304,7 @@
         </record>
         
         <!-- Menu -->
-        <menuitem id="menu_wbs_project" action="action_wbs_project_form" parent="base.menu_res_company_global" name="WBS/Project" sequence="40"
+        <menuitem id="menu_wbs_project" action="action_wbs_project_form" parent="menu_profit_center" name="WBS/Project" sequence="40"
             groups="base.group_no_one"/>
     </data>
 </openerp>

@@ -36,9 +36,6 @@ class sale_order(models.Model):
     business_area_id = fields.Many2one('business.area', string='Business Area', change_default=True,
         required=True, readonly=True, states={'draft': [('readonly', False)]},
         track_visibility='always')
-    sale_office_id = fields.Many2one('sale.office', string='Sales Office', change_default=True,
-        required=True, readonly=True, states={'draft': [('readonly', False)]},
-        track_visibility='always')
 
     @api.model
     def _prepare_invoice(self, order, lines):
@@ -51,6 +48,8 @@ class sale_order(models.Model):
 class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
 
+    sale_office_id = fields.Many2one('sale.office',
+        string='Sales Office', readonly=True, states={'draft': [('readonly', False)]},)
     profit_center_id = fields.Many2one('profit.center',
         string='Profit Center', readonly=True, states={'draft': [('readonly', False)]},)
     wbs_project_id = fields.Many2one('wbs.project',
@@ -60,7 +59,7 @@ class sale_order_line(models.Model):
     def _prepare_order_line_invoice_line(self, line, account_id=False):
         res = super(sale_order_line, self)._prepare_order_line_invoice_line(line, account_id=account_id)
         res.update({
-            'sale_office_id': line.order_id.sale_office_id and line.order_id.sale_office_id.id or False,
+            'sale_office_id': line.sale_office_id and line.sale_office_id.id or False,
             'profit_center_id': line.profit_center_id and line.wbs_project_id.id or False,
             'wbs_project_id': line.wbs_project_id and line.wbs_project_id.id or False,
         })

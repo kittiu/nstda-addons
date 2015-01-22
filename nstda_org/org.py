@@ -41,7 +41,6 @@ class business_area(models.Model):
             string='Users', copy=False)
     sale_office_ids = fields.One2many('sale.office', 'business_area_id', string='Sales Offices', copy=False)
     profit_center_ids = fields.One2many('profit.center', 'business_area_id', string='Profit Centers', copy=False)
-    wbs_project_ids = fields.One2many('wbs.project', 'business_area_id', string='WBS/Projects', copy=False)
 
     _sql_constraints = [
         ('code_uniq', 'unique(code)',
@@ -56,6 +55,31 @@ class business_area(models.Model):
         return super(business_area, self).create(vals)
 
 
+class branch(models.Model):
+    _name = "branch"
+    _description = "Branch"
+    _inherits = {'account.analytic.account': "analytic_account_id"}
+    
+    code = fields.Char(string='Code', index=True)
+    name = fields.Char(string='Name')
+    company_id = fields.Many2one('res.company', string='Company', ondelete='restrict',
+        required=True, default=lambda self: self.env['res.company']._company_default_get('branch'))
+    analytic_account_id = fields.Many2one('account.analytic.account', 'Branch/Analytic',
+            ondelete='cascade', required=True, auto_join=True)
+    sale_office_ids = fields.One2many('sale.office', 'branch_id', string='Sales Office', copy=False)
+
+    _sql_constraints = [
+        ('code_uniq', 'unique(code)',
+            'Code must be unique!'),
+    ]
+    
+    @api.model
+    def create(self, vals):
+        if not vals.get('type', False) or vals.get('type') not in ('branch'):
+            vals['type'] = 'branch'
+        self = self.with_context(code=vals['code'], name=vals['name'])
+        return super(branch, self).create(vals)
+
 class sale_office(models.Model):
     _name = "sale.office"
     _description = "Sales Office"
@@ -67,6 +91,8 @@ class sale_office(models.Model):
         required=True, default=lambda self: self.env['res.company']._company_default_get('sale.office'))
     analytic_account_id = fields.Many2one('account.analytic.account', 'Business Area/Analytic',
             ondelete='cascade', required=True, auto_join=True)
+    branch_id = fields.Many2one('branch', string='Branch', ondelete='restrict',
+        required=True)
     business_area_id = fields.Many2one('business.area', string='Business Area', ondelete='restrict',
         required=True)
     
@@ -96,6 +122,7 @@ class profit_center(models.Model):
             ondelete='cascade', required=True, auto_join=True)
     business_area_id = fields.Many2one('business.area', string='Business Area', ondelete='restrict',
         required=True)
+    wbs_project_ids = fields.One2many('wbs.project', 'profit_center_id', string='WBS/Projects', copy=False)
 
     _sql_constraints = [
         ('code_uniq', 'unique(code)',
@@ -121,7 +148,7 @@ class wbs_project(models.Model):
         required=True, default=lambda self: self.env['res.company']._company_default_get('wbs.project'))
     analytic_account_id = fields.Many2one('account.analytic.account', 'Business Area/Analytic',
             ondelete='cascade', required=True, auto_join=True)
-    business_area_id = fields.Many2one('business.area', string='Business Area', ondelete='restrict',
+    profit_center_id = fields.Many2one('profit.center', string='Profit Center', ondelete='restrict',
         required=True)
 
     _sql_constraints = [

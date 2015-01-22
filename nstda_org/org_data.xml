@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data noupdate="1">
+    <data noupdate="0">
 
         <!-- Resource: business.area -->
         <record id="all_business_area_account" model="account.analytic.account">
@@ -9,6 +9,14 @@
             <field name="type">view</field>
         </record>
         <function id="parent_business_area_default_set" model="ir.values" name="set" eval="('default',False,'parent_id', [('business.area', False)], all_business_area_account, True, False, False, False, True)"/>
+
+        <!-- Resource: branch -->
+        <record id="all_branch_account" model="account.analytic.account">
+            <field name="name">Branch</field>
+            <field name="code">BRANCH</field>
+            <field name="type">view</field>
+        </record>
+        <function id="parent_branch_default_set" model="ir.values" name="set" eval="('default',False,'parent_id', [('sale.office', False)], all_branch_account, True, False, False, False, True)"/>
 
         <!-- Resource: sale.office -->
         <record id="all_sale_office_account" model="account.analytic.account">

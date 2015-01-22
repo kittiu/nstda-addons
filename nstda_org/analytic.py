@@ -28,6 +28,7 @@ class account_analytic_account(models.Model):
     def __init__(self, pool, cr):
         super(account_analytic_account, self).__init__(pool, cr)
         options = [('business_area', 'Business Area'),
+                   ('branch', 'Branch'),
                    ('sale_office', 'Sales Office'),
                    ('profit_center', 'Profit Center'),
                    ('wbs_project', 'WBS/Project')]
